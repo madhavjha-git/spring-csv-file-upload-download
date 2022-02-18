@@ -39,11 +39,9 @@ public class CSVHelper {
 		final CSVFormat csvFormat = CSVFormat.Builder.create().setHeader().setSkipHeaderRecord(true)
 				.setIgnoreHeaderCase(true).setTrim(true).build();
 
-		BufferedReader fileReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-		logger.info("Reading stream");
-
 		List<Movie> movies = new ArrayList<Movie>();
-		try {
+		try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));) {
+			logger.info("Reading stream");
 			Iterable<CSVRecord> records = csvFormat.parse(fileReader);
 			for (CSVRecord csvRecord : records) {
 				Movie movie = new Movie(Long.parseLong(csvRecord.get("Id")), csvRecord.get("Title"),
